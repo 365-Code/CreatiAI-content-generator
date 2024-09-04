@@ -5,6 +5,7 @@ import { Editor, EditorProps } from "@toast-ui/react-editor";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Copy } from "lucide-react";
+import { useToast } from "./ui/use-toast";
 
 type Props = {
   templateContent: string;
@@ -24,13 +25,36 @@ const TemplateOutput = ({ templateContent }: Props) => {
     }
   }, [templateContent]);
 
+  const { toast } = useToast();
+  const handleCopy = () => {
+    if (editorRef.current) {
+      const copyText = editorRef.current.getInstance().getMarkdown();
+      navigator.clipboard
+        .writeText(copyText)
+        .then(() => {
+          toast({
+            title: "Copied To Clipboard",
+            variant: "default",
+          });
+        })
+        .catch((err) => {
+          console.error("Failed to copy: ", err);
+          toast({
+            title: "Copied To Clipboard",
+            description: err,
+            variant: "default",
+          });
+        });
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col gap-4 h-full">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             Your Results
-            <Button className="flex items-center gap-2">
+            <Button onClick={handleCopy} className="flex items-center gap-2">
               <Copy className="w-4 h-4" />
               Copy
             </Button>

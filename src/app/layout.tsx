@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans, Outfit } from "next/font/google";
 import "./globals.css";
 import Provider from "@/components/Provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const font = Outfit({ subsets: ["latin"] });
 
@@ -18,7 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Provider>
-        <body className={font.className}>{children}</body>
+        <body className={font.className}>
+          {children}
+
+          <Toaster />
+        </body>
       </Provider>
     </html>
   );
